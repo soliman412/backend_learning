@@ -1,0 +1,28 @@
+### Get all employees
+GET http://localhost:8080/employees
+
+### Create a valid employee
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "Lina",
+  "salary": 2500
+}
+
+### Create with missing name
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "",
+  "salary": 2500
+}
+
+### Broken JSON
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "Omar",
+}  
