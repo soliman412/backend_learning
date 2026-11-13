@@ -1,0 +1,47 @@
+### 1. Valid create
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "Lina",
+  "salary": 2500
+}
+
+### 2. Salary as text
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "Omar",
+  "salary": "2500"
+}
+
+### 3. Typo in field name
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "Omar",
+  "salry": 2500
+}
+
+### 4. Client sends its own id
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "id": 999,
+  "name": "Omar",
+  "salary": 2500
+}
+
+### 5. Decimal id
+GET http://localhost:8080/employees/1.5
+
+### 6. Method not in the spec
+PATCH http://localhost:8080/employees/1
+Content-Type: application/json
+
+{
+  "salary": 5000
+}

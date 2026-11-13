@@ -1,0 +1,191 @@
+openapi: 3.1.0
+
+info:
+  title: Employees API
+  version: 1.0.0
+  description: A simple API for managing employees, built with Go.
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+tags:
+  - name: Employees
+    description: Operations on employees
+
+paths:
+  /employees:
+    get:
+      summary: List all employees
+      description: Returns a list of all employees in the system.
+      tags:
+        - Employees
+      responses:
+        '200':
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+
+    post:
+      summary: Create an employee
+      description: Adds a new employee. The server assigns the ID.
+      tags:
+        - Employees
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+      responses:
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /employees/{id}:
+    parameters:
+      - $ref: '#/components/parameters/EmployeeId'
+
+    get:
+      summary: Get one employee
+      description: Returns a single employee by ID.
+      tags:
+        - Employees
+      responses:
+        '200':
+          description: The employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      summary: Update an employee
+      description: Replaces the name and salary of an existing employee.
+      tags:
+        - Employees
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      summary: Delete an employee
+      description: Removes an employee. The ID is never reused.
+      tags:
+        - Employees
+      responses:
+        '204':
+          description: Employee deleted. No content is returned.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  parameters:
+    EmployeeId:
+      name: id
+      in: path
+      required: true
+      description: The employee's ID.
+      schema:
+        type: integer
+        minimum: 1
+        example: 2
+
+  responses:
+    BadRequest:
+      description: Invalid input (bad ID, invalid JSON, or failed validation).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: id must be a positive number
+
+    NotFound:
+      description: No employee exists with this ID.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: employee not found
+
+  schemas:
+    Employee:
+      type: object
+      required:
+        - id
+        - name
+        - salary
+      properties:
+        id:
+          type: integer
+          description: Unique ID, assigned by the server.
+          example: 1
+        name:
+          type: string
+          description: Full name of the employee.
+          minLength: 1
+          example: Ahmad
+        salary:
+          type: number
+          description: Monthly salary. Must be greater than 0.
+          exclusiveMinimum: 0
+          example: 3000
+
+    EmployeeInput:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - salary
+      properties:
+        name:
+          type: string
+          description: Full name of the employee.
+          minLength: 1
+          example: Lina
+        salary:
+          type: number
+          description: Monthly salary. Must be greater than 0.
+          exclusiveMinimum: 0
+          example: 2500
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: A short message explaining what went wrong.
+          example: employee not found
