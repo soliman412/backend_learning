@@ -1,0 +1,14 @@
+-- Departments
+CREATE TABLE IF NOT EXISTS departments (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    floor INTEGER NOT NULL
+);
+
+-- Employees
+CREATE TABLE IF NOT EXISTS employees (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL,
+    salary NUMERIC(10, 2) NOT NULL CHECK (salary > 0),
+    department_id INTEGER REFERENCES departments(id)
+);

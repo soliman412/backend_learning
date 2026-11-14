@@ -1,0 +1,38 @@
+### Get all
+GET http://localhost:8080/employees
+
+### Get one
+GET http://localhost:8080/employees/2
+
+### Create
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "name": "Lina",
+  "salary": 2500
+}
+
+### Update employee 2
+PUT http://localhost:8080/employees/2
+Content-Type: application/json
+
+{
+  "name": "Sara Ali",
+  "salary": 1800
+}
+
+### Update non-existing
+PUT http://localhost:8080/employees/99
+Content-Type: application/json
+
+{
+  "name": "Ghost",
+  "salary": 1000
+}
+
+### Delete employee 3
+DELETE http://localhost:8080/employees/3
+
+### Get deleted employee
+GET http://localhost:8080/employees/3
